@@ -1,7 +1,16 @@
-fs = 48000;                                                     % sampeling freq
+function [coeff_mat,freq_resp_filt_mat,fgrid] = constant_Q_fam(f0,fs) 
+if(nargin == 0)                                                 
+    fs = 48000;                                                 % function sets fs = 48kHz as default value (in case wasn't passed)
+    fc = 27.5;                                                  % function sets fc = 27.5 (the frequency corresponding to musical note A0) if wasn't passed
+elseif(nargin == 1)                                                 
+    fs = 48000;                                                 % sampeling freq
+    fc = f0;                                                    % fc0
+else
+    fc = f0;
+end   
+
 f_bottom = 20;                                                  % bottom of spec
-f_top    = 20*10^3;                                             % top of spec
-fc = 27.5;                                                      % the frequency corresponding to musical note A0;
+f_top    = 20*10^3;                                             % top of spec                                                   
 fc_vec = [fc];        
 Q = 1/((2)^(1/2));                                              % butterworth quality factor;
 for i = [1:10]                                                  % building series of frequencies fc_vec, where fc_i = 2*(fc_i-1)
@@ -32,13 +41,19 @@ coeff_mat = [];                                                 % a matrix to ho
 clf; figure(1);                                                 %                                             ----------------
 fgrid = fs*(0:(N-1))/(N);                                       %                                             a00 | a10 | a20...
 hold on;                                                        %                                             ----------------
-for i = [1:length(fc_vec)]                                      %                                         h1: b01 | b02 | b03... etc. 
+xlabel("f[Hz] {\copyright}ROT"); ylabel("|H(f)|"); grid on;     %                                         h1: b01 | b11 | b21... 
+title("Constast-Q Band Pass Filters"); axis([0,2*10^4,0,1]);    %                                             a01 | a11 | a21...etc.
+for i = [1:length(fc_vec)]                                      
+    % DO NOT IMPELEMENT SYSTEMS WITH ALIASING:                 
+    if(f_high(i)/fs < 0 || f_high(i)/fs > 1 || f_low(i)/fs < 0 || f_low(i)/fs > 1)                         
+        break                                                                                                
+    end
     [b,a] = butter(2,[f_high(i), f_low(i)]./fs,"bandpass");
     coeff_mat = [coeff_mat;b;a];                                % add vectors b,a to the coeff matrix
     [h,~] = freqz(b,a,fs);                                      % calc frequency response of filter
-    freq_resp_filt_mat = [freq_resp_filt_mat;h];                % add frequency resp vector to the filter matrix
+    freq_resp_filt_mat = [freq_resp_filt_mat;h'];               % add frequency resp vector to the filter matrix
     plot(fgrid,abs(h),'black');
 end
 xline(fc_vec,':'); yline(0.707, ':');                           % mark center frequencies and -3db 
-xlabel("f[Hz] {\copyright}ROT"); ylabel("|H(f)|"); hold off; grid on;
-title("Constast-Q Band Pass Filters"); axis([0,2*10^4,0,1]);
+hold off;
+end
