@@ -17,8 +17,6 @@ function [my_saw,t] = my_sawtooth(freq,fs)
     for f_i = freq
         my_saw = my_saw + my_saw_func(f_i);     % calculate signal
     end
-    sound(my_saw,fs);
-    pause(1.2*T);
 
     % plot signal:
     N = fs*T;
