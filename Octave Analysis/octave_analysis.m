@@ -10,7 +10,7 @@ function octave_analysis()
     sound(x,fs);
     pause(1.2*T);
     
-    [coeff_mat, freq_resp, fgrid] = octave_filters(20,fs);
+    [coeff_mat, freq_resp, fgrid] = third_octave_filters(20,fs);
     [n,m] = size(coeff_mat);
     for i = [1:2:n]
         figure(figure_counter); subplot(311);plot(t,x); grid on; title("Original Signal {\copyright} ROT"); xlabel("t[sec]");ylabel("x(t)");
