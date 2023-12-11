@@ -15,8 +15,9 @@ end
 
 f_bottom = 20;                                                  % bottom of spec
 f_top    = 20*10^3;                                             % top of spec                                                   
-fc_vec = fc*2.^[0:9];        
+fc_vec = fc*2.^[0:8];
 Q = 1/((2)^(1/2));                                              % butterworth quality factor;       
+fb_vec = fc_vec./Q;
 N = fs;                                                         % number of evaluation points
 freq_resp_filt_mat = [];                                        % a matrix to hold frequency response of each filter
 coeff_mat = [];                                                 % a matrix to hold each filter's coeffs:  h0: b00 | b10 | b20...
@@ -26,11 +27,7 @@ hold on;                                                        %               
 xlabel("f[Hz] {\copyright}ROT"); ylabel("|H(f)|"); grid on;     %                                         h1: b01 | b11 | b21... 
 title("Octave-spread Butterworth Band Pass Filters"); axis([f_bottom,f_top,0,1]);    %                        a01 | a11 | a21...etc.
 for i = [1:length(fc_vec)] 
-    % DO NOT IMPELEMENT SYSTEMS WITH ALIASING:                 
-    if(fc_vec(i)*Q/fs < 0 || fc_vec(i)*Q/fs > 1 || fc_vec(i)/(fs*Q) < 0 || fc_vec(i)/(fs*Q) > 1)                         
-        break                                                                                                
-    end
-    [b,a] = butter(2,[fc_vec(i)/Q, fc_vec(i)*Q]./fs,"bandpass");
+    [b,a] = butter(2,[fc_vec(i) - fb_vec(i)/2, fc_vec(i) + fb_vec(i)/2]./(fs/2),"bandpass");
     coeff_mat = [coeff_mat;b;a];                                % add vectors b,a to the coeff matrix
     [h,~] = freqz(b,a,fs);                                      % calc frequency response of filter
     freq_resp_filt_mat = [freq_resp_filt_mat;h'];               % add frequency resp vector to the filter matrix
