@@ -24,11 +24,17 @@ subplot(212); plot(fgrid,mag_Xf); grid on; axis([20, 20*10^3, 0, 1]); xlabel("f[
 %             s + 1          expression by hand...}           
 
 fc = 100;
-H0 = 1.2;
-V0 = 1 + H0
+H0 = -0.8;
+V0 = 1 + H0;
 b = [1/(2*pi*fc) V0]; % s + (1 + H0) = s + V0
 a = [1/(2*pi*fc) 1]; % s + 1
-[b_z,a_z] = bilinear(b,a,fs)
+
+if(V0 >= 1)
+    [b_z,a_z] = bilinear(b,a,fs); % boost case;
+    freqs(b,a)
+else
+    [a_z,b_z] = bilinear(a,b,fs); % reciprocal of t.f. in "cut" case;
+end
 y = filter(b_z,a_z,x);
 Y_f = (1/N)*fft(y,N);
 mag_Yf = abs(Y_f);
