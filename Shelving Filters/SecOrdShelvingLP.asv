@@ -1,0 +1,30 @@
+% second order LP shelving filter
+fs = 44100;
+T = 1;
+N = T*fs;
+t = (0:N-1)*(1/fs);
+fgrid = fs*(0:N-1)/N;
+n_plot = 1000;
+
+frequencies = [75 600]';
+x = sum(sin(2*pi*frequencies.*t));
+Xf = fft(x,N);
+Xf_mag = abs(Xf);
+
+subplot(411);plot(t(1:n_plot),x(1:n_plot)); grid on; title("Original signal x(t)"); xlabel('t[sec]'); ylabel('x(t)'); axis tight;
+subplot(412);
+H0 = 1.2;
+V0 = 1 + H0;
+
+fc = 100;
+wc = 2*pi*fc;
+b = [1/(wc), ((2*V0)^(1/2))/wc , V0];
+a = [1/(wc), (2^(1/2))/wc, 1]; 
+[b_z, a_z] = bilinear(b,a,fs);
+
+y = filter(b_z,a_z,x);
+subplot(414);plot(t(1:n_plot), y(1:n_plot)); grid on;
+% listen to the filtered signal:
+sound(x,fs);
+pause(1.2*T);
+sound(y,fs);
