@@ -24,7 +24,7 @@ V0 = 1.2;
 b1 = [(1/wc)^2, (V0/Q_factor_1)/wc, 1];
 a1 = [(1/wc)^2, (1/Q_factor_1)/wc, 1];
 
-Q_factor_2 = 0.707; fb2 = fc/Q_factor_2;
+Q_factor_2 = 0.8; fb2 = fc/Q_factor_2;
 
 b2 = [(1/wc)^2, (V0/Q_factor_2)/wc, 1];
 a2 = [(1/wc)^2, (1/Q_factor_2)/wc, 1];
@@ -32,6 +32,6 @@ a2 = [(1/wc)^2, (1/Q_factor_2)/wc, 1];
 H = tf(b,a);
 %figure(1); pzmap(H); grid on;
 fb1_str = ["Zero-Pole Plot (fc,Q,fb) = (" + num2str(fc) + "," + num2str(Q_factor_1) + "," + num2str(fb1) + ")"];
-fb2_str = ["Zero-Pole Plot (fc,Q,fb) = (" + num2str(fc) + "," + num2str(Q_factor_2) + "," + num2str(fb2) + ")"];
+fb2_str = ["Zero-Pole Plot (fc,Q,fb) = (" + num2str(fc) + "," + num2str(Q_factor_1) + "," + num2str(fb2) + ")"];
 figure(1); subplot(211); zplane(b1,a1); title(fb1_str); grid on;
-subplot(212); zplane(b2,a2); title(fb2_str); grid on;
+subplot(212); zplane(b2,a2); grid on;
