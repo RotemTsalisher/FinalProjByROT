@@ -1,5 +1,5 @@
 % comparing results:
-% designing H(z) as a lp filter with fc = 100 hz
+% designing H(z) as a lp filter with fc = 1000 hz
 % first design is with the use of an auxiliary variable
 % according to the formulas provided in Udo Zoler's book,
 % formulas are implemented here for a0,a1,a2,b0,b1,b2 and added in a
