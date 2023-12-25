@@ -28,13 +28,4 @@ else
     [a_z, b_z] = bilinear(a,b,fs);
 end
 
-y = filter(b_z,a_z,x);
-Yf = (1/N)*fft(y,N);
-Yf_mag = abs(Yf);
-
-subplot(413);plot(t(1:n_plot), y(1:n_plot)); grid on; title("Filtered signal y(t)"); xlabel("t[sec]"); ylabel("y(t)"); axis tight;
-subplot(414);plot(fgrid, Yf_mag); grid on; title("Filtered Signal Spectrum"); xlabel("f[Hz]"); ylabel("Y(f)"); axis([20 20*10^3 0 1]);
-% listen to the filtered signal:
-sound(x,fs);
-pause(1.2*T);
-sound(y,fs);
+freqz(b_z,a_z,N)

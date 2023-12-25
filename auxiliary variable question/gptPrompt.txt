@@ -1,0 +1,11 @@
+given a general structure of a second-order digital filter, designed in the Z-domain:
+
+H(z) = (a0 + a1*z^(-1) + z^(-2))/(b0 + b1*z^(-1) + b2*z^(-2))
+
+and with the use of an auxiliary variable k, where k = tan(wc*T/2) {T is a parameter for the bilinear transform and wc is the cutoff angulat frequency}
+
+please find a formula to describe the coefficients {a0, a1, a2, b0, b1, b2} in terms of k.
+make sure that the function is normalized, such that b0 = 1.
+
+please provide mathematical expressions as well as MATLAB code.
+make sure the MATLAB code will plot the filter using freqz function. you are free to choose a sampeling frequency and duration as you wish. 

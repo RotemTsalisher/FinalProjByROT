@@ -23,9 +23,9 @@ b = [(1/(wc))^2, ((2*V0)^(1/2))/wc , V0];
 a = [(1/(wc))^2, (2^(1/2))/wc, 1];
 
 if(V0 >= 1)
-    [b_z, a_z] = bilinear(b,a,fs);
+    [b_z, a_z] = bilinear(b,a,fs)
 else
-    [a_z, b_z] = bilinear(a,b,fs);
+    [a_z, b_z] = bilinear(a,b,fs)
 end
 
 y = filter(b_z,a_z,x);
