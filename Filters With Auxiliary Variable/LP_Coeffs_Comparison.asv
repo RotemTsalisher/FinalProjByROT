@@ -1,0 +1,22 @@
+fs = 44100;
+T = 1;
+N = fs*T;
+Ts = 1/fs;
+
+fc = 1000;
+wc = 2*pi*fc; % consider CTFT
+theta_c = wc
+k = tan((wc*Ts)/2);
+
+den = 1 + sqrt(2)*k + k^2;
+b0 = (k^2)/den; b1 = (2*k^2)/den; b2 = (k^2)/den;
+a0 = 1; a1 = 2*(k^2-1)/den; a2 = (1-sqrt(2)*k + k^2)/den;
+a = [a0 a1 a2]; b = [b0 b1 b2];
+
+a_ = [(1/wc)^2 sqrt(2)/wc 1]; b_ = [1];
+[b_z, a_z] = bilinear(b_, a_, fs);
+
+[H, fgrid] = freqz(b_z,a_z,N,fs);
+%fgrid = wo*fs/(2*pi); 
+H_ = 20*log(abs(H));
+plot(fgrid,H_); grid on; axis([20 2000 -10 0]);
