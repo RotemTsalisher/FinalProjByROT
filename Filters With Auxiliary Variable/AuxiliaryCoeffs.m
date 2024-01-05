@@ -1,9 +1,5 @@
-fs = 44100;
-T = 1;
-N = fs*T;
+function [b,a] = AuxiliaryCoeffs(fc, fs, N)
 Ts = 1/fs;
-
-fc = 1000;
 wc = 2*pi*fc;
 k = tan((wc*Ts)/2);
 
@@ -12,7 +8,8 @@ b0 = (k^2)/den; b1 = (2*k^2)/den; b2 = (k^2)/den;
 a0 = 1; a1 = 2*(k^2-1)/den; a2 = (1-sqrt(2)*k + k^2)/den;
 a = [a0 a1 a2]; b = [b0 b1 b2];
 
-freqz(b,a,N,fs); %filter coeffs are correct
+%[H, fgrid] = freqz(b,a,N,fs); %filter coeffs are correct
+%plot(fgrid, 20*log(abs(H))); grid on; axis([20, 2000, -20, 0]);
 
 % hand made plot needs to be fixed, 
 % need to have better understanding of the returning frequency vector 
@@ -24,3 +21,5 @@ freqz(b,a,N,fs); %filter coeffs are correct
 % fgrid = 2*atan(wo*fs/(pi)); 
 % H_ = 20*log(abs(H));
 % plot(fgrid,H_); grid on; axis([20 2000 -10 0]);
+
+end
