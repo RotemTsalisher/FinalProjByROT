@@ -13,7 +13,7 @@ title("Original Sig"); ylabel("x(t)"); xlabel("t[sec]");
 subplot(222); plot(fgrid,abs(Xf)); grid on; axis([20,20000,0,0.65]);
 title("Spectrum of Original Sig"); ylabel("X(f)"); xlabel("f[Hz]");
 
-[b,a] = AuxiliaryCoeffs(fc,fs,N);
+[b,a] = AuxiliaryCoeffsLP(fc,fs,N);
 yt = filter(b,a,xt);
 Yf = (1/N)*fft(yt);
 
