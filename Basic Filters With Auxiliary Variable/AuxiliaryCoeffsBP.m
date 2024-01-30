@@ -1,4 +1,4 @@
-function [b,a] = AuxiliaryCoeffsBP(fc, fs,BW, N)
+function [b,a] = AuxiliaryCoeffsBP(fc, fs,BW)
 Ts = 1/fs;
 wc = 2*pi*fc;
 k = tan((wc*Ts)/2);

@@ -1,4 +1,4 @@
-function [b,a] = AuxiliaryCoeffsLP(fc, fs, N)
+function [b,a] = AuxiliaryCoeffsLP(fc, fs)
 Ts = 1/fs;
 wc = 2*pi*fc;
 k = tan((wc*Ts)/2);

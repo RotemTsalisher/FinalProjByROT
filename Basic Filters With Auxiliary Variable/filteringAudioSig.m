@@ -10,58 +10,47 @@ xt = A0*sawtooth(2*pi*f0.*t) + A1*sin(2*pi*f1.*t);
 Xf = (1/N)*fft(xt);
 
 %% LP Section: 
-% figure(1); subplot(221); plot(t(1:1000),xt(1:1000)); grid on; axis tight; 
-% title("Original Sig"); ylabel("x(t)"); xlabel("t[sec]");
-% subplot(222); plot(fgrid,abs(Xf)); grid on; axis([20,20000,0,0.65]);
-% title("Spectrum of Original Sig"); ylabel("X(f)"); xlabel("f[Hz]");
-% 
-% [b,a] = AuxiliaryCoeffsLP(fc,fs,N);
-% yt = filter(b,a,xt);
-% Yf = (1/N)*fft(yt);
-% 
-% subplot(224); plot(fgrid,abs(Yf)); grid on; axis([20,20000,0,0.65]);
-% title("Spectrum of Filtered Sig"); ylabel("Y(f)"); xlabel("f[Hz]");
-% subplot(223); plot(t(1:1000),yt(1:1000)); grid on; axis tight; %axis([20,20000,0,1]);
-% title("Filtered Sig"); ylabel("x(t)"); xlabel("t[sec]");
-% sound(xt,fs); pause(T*1.5); sound(yt,fs);
+
+[b,a] = AuxiliaryCoeffsLP(fc,fs);
+yt = filter(b,a,xt);
+plotRes(xt,yt,t,fgrid,N, "Low Pass (With Auxiliary Variable)")
+
 
 %% HP section: 
-% figure(1); subplot(221); plot(t(1:1000),xt(1:1000),t(1:1000), sawtooth(2*pi*440.*t(1:1000)),'black--'); grid on; axis tight; 
-% title("Original Sig with Saw @ 440Hz in black"); ylabel("x(t)"); xlabel("t[sec]");
-% subplot(222); plot(fgrid,abs(Xf)); grid on; axis([20,20000,0,0.65]);
-% title("Spectrum of Original Sig"); ylabel("X(f)"); xlabel("f[Hz]");
-% 
-% [b,a] = AuxiliaryCoeffsHP(fc,fs,N);
-% yt = filter(b,a,xt);
+
+[b,a] = AuxiliaryCoeffsHP(fc,fs);
+yt = filter(b,a,xt);
 % Yf = (1/N)*fft(yt);
-% 
-% subplot(224); plot(fgrid,abs(Yf)); grid on; axis([20,20000,0,0.65]);
-% title("Spectrum of Filtered Sig"); ylabel("Y(f)"); xlabel("f[Hz]");
-% subplot(223); plot(t(1:1000),yt(1:1000)); grid on; axis tight; %axis([20,20000,0,1]);
-% title("Filtered Sig"); ylabel("x(t)"); xlabel("t[sec]");
-% sound(xt,fs); pause(T*1.5); sound(yt,fs);
+plotRes(xt,yt,t,fgrid,N,"High Pass (With Auxiliary Variable)")
+
 
 %% BP section: 
-figure(1); subplot(321); plot(t(1:1000),xt(1:1000)); grid on; axis tight; 
-title("Original Sig"); ylabel("x(t)"); xlabel("t[sec]");
-subplot(322); plot(fgrid,abs(Xf)); grid on; axis([20,20000,0,0.65]);
-title("Spectrum of Original Sig"); ylabel("X(f)"); xlabel("f[Hz]");
 
-[b,a] = AuxiliaryCoeffsBP(fc,fs,fc/4,N);
+[b,a] = AuxiliaryCoeffsBP(fc,fs,fc/4);
 yt = filter(b,a,xt);
-Yf = (1/N)*fft(yt);
+plotRes(xt,yt,t,fgrid,N,"Band Pass (With Auxiliary Variable)")
 
-yt_ = RelativeRMS(0,xt,yt);
-Yf_ = (1/N)*fft(yt_);
-subplot(324); plot(fgrid,abs(Yf)); grid on; axis([20,20000,0,0.65]);
-title("Spectrum of Filtered Sig"); ylabel("Y(f)"); xlabel("f[Hz]");
-subplot(323); plot(t(1:1000),yt(1:1000)); grid on; axis tight; %axis([20,20000,0,1]);
-title("Filtered Sig"); ylabel("x(t)"); xlabel("t[sec]");
-sound(xt,fs); pause(T*1.5); sound(yt,fs);
-subplot(325); plot(t(1:1000), yt_(1:1000)); grid on;
-title("Filtered Sig with Relative RMS"); ylabel("y'(t)"); xlabel("t[sec]");
-subplot(326); plot(fgrid,abs(Yf_)); grid on; axis([20,20000,0,1]);
-title("Spectrum of Filtered Sig with Relative RMS"); ylabel("Y'(f)"); xlabel("f[Hz]");
+%% shelving and peak filters
+%% LP (SHELVING) BOOST:
 
-x_pow = sum(xt.^2);
-yt_power = sum(yt_.^2); % proof of conservation of power 
+[b,a] = LPBoostShelvingAux(fc*0.5,fs,0.85);
+yt = filter(b,a,xt);
+plotRes(xt,yt,t,fgrid,N,"Low Pass Shelving (With Auxiliary Variable, Boost Mode)")
+
+%% LP (SHELVING) CUT:
+
+[b,a] = LPCutShelvingAux(fc*0.5,fs,0.9);
+yt = filter(b,a,xt);
+plotRes(xt,yt,t,fgrid,N,"Low Pass Shelving (With Auxiliary Variable, Cut Mode)")
+
+%% Peak Boost:
+
+[b,a] = peakAuxBoost(fc*0.5,fs,0.9,sqrt(2)*(0.5)*fc);
+yt = filter(b,a,xt);
+plotRes(xt,yt,t,fgrid,N,"Peak (With Auxiliary Variable, Boost Mode)")
+
+%% Peak Cut:
+
+[b,a] = peakAuxCut(fc*0.5,fs,0.9,sqrt(2)*(0.5)*fc);
+yt = filter(b,a,xt);
+plotRes(xt,yt,t,fgrid,N,"Peak (With Auxiliary Variable, Cut Mode)")
