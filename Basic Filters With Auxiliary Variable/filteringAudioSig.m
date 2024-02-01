@@ -1,3 +1,4 @@
+
 fs = 44100;
 T = 1;
 N = fs*T;
@@ -13,44 +14,53 @@ Xf = (1/N)*fft(xt);
 
 [b,a] = AuxiliaryCoeffsLP(fc,fs);
 yt = filter(b,a,xt);
-plotRes(xt,yt,t,fgrid,N, "Low Pass (With Auxiliary Variable)")
+plotRes(xt,yt,t,fgrid,N, "Low Pass (With Auxiliary Variable)",fc)
 
 
 %% HP section: 
 
 [b,a] = AuxiliaryCoeffsHP(fc,fs);
 yt = filter(b,a,xt);
-% Yf = (1/N)*fft(yt);
-plotRes(xt,yt,t,fgrid,N,"High Pass (With Auxiliary Variable)")
+plotRes(xt,yt,t,fgrid,N,"High Pass (With Auxiliary Variable)",fc)
 
 
 %% BP section: 
 
 [b,a] = AuxiliaryCoeffsBP(fc,fs,fc/4);
 yt = filter(b,a,xt);
-plotRes(xt,yt,t,fgrid,N,"Band Pass (With Auxiliary Variable)")
+plotRes(xt,yt,t,fgrid,N,"Band Pass (With Auxiliary Variable)",fc)
 
 %% shelving and peak filters
 %% LP (SHELVING) BOOST:
 
-[b,a] = LPBoostShelvingAux(fc*0.5,fs,0.85);
+[b,a] = LPBoostShelvingAux(fc*0.5,fs,1.25);
 yt = filter(b,a,xt);
-plotRes(xt,yt,t,fgrid,N,"Low Pass Shelving (With Auxiliary Variable, Boost Mode)")
-
+plotRes(xt,yt,t,fgrid,N,"Low Pass Shelving (With Auxiliary Variable, Boost Mode)",fc*0.5)
 %% LP (SHELVING) CUT:
 
-[b,a] = LPCutShelvingAux(fc*0.5,fs,0.9);
+[b,a] = LPCutShelvingAux(fc*0.5,fs,3);
 yt = filter(b,a,xt);
-plotRes(xt,yt,t,fgrid,N,"Low Pass Shelving (With Auxiliary Variable, Cut Mode)")
+plotRes(xt,yt,t,fgrid,N,"Low Pass Shelving (With Auxiliary Variable, Cut Mode)",fc*0.5)
+%% HP (SHELVING) BOOST:
+
+[b,a] = HPBoostShelvingAux(fc,fs,3);
+yt = filter(b,a,xt);
+plotRes(xt,yt,t,fgrid,N,"High Pass Shelving (With Auxiliary Variable, Boost Mode", fc);
+
+%% HP (SHELVING) CUT:
+
+[b,a] = HPCutShelvingAux(fc,fs,3);
+yt = filter(b,a,xt);
+plotRes(xt,yt,t,fgrid,N,"High Pass Shelving (With Auxiliary Variable, Cut Mode", fc);
 
 %% Peak Boost:
 
-[b,a] = peakAuxBoost(fc*0.5,fs,0.9,sqrt(2)*(0.5)*fc);
+[b,a] = peakAuxBoost(fc,fs,3,0.1*fc);
 yt = filter(b,a,xt);
-plotRes(xt,yt,t,fgrid,N,"Peak (With Auxiliary Variable, Boost Mode)")
+plotRes(xt,yt,t,fgrid,N,"Peak (With Auxiliary Variable, Boost Mode)",fc)
 
 %% Peak Cut:
 
-[b,a] = peakAuxCut(fc*0.5,fs,0.9,sqrt(2)*(0.5)*fc);
+[b,a] = peakAuxCut(fc*0.5,fs,3,0.1*fc);
 yt = filter(b,a,xt);
-plotRes(xt,yt,t,fgrid,N,"Peak (With Auxiliary Variable, Cut Mode)")
+plotRes(xt,yt,t,fgrid,N,"Peak (With Auxiliary Variable, Cut Mode)",fc*0.5)

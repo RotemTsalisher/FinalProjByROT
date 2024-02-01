@@ -1,4 +1,4 @@
-function plotRes(xt,yt,t,fgrid,N,filterName)
+function plotRes(xt,yt,t,fgrid,N,filterName,fc)
 
 Xf = (1/N)*fft(xt);
 Yf = (1/N)*fft(yt);
@@ -25,5 +25,5 @@ title("Filtered Sig with Relative RMS"); ylabel("y'(t)"); xlabel("t[sec]");
 subplot(326); plot(fgrid,abs(Yf_)); grid on; axis([20,20000,0,max(abs(Yf_)) + 0.05]);
 title("Spectrum of Filtered Sig with Relative RMS"); ylabel("Y'(f)"); xlabel("f[Hz]");
 
-sgtitle([("Filtering for " + filterName + " Filter:")])
+sgtitle([("Filtering for " + filterName + " Filter:"), ("fc = " + fc  + "[hz]")])
 end
