@@ -6,8 +6,22 @@ N = fs*T;
 
 
 [b,a] = firstOrdRegaliaBoost(fc,Gdb,fs);
-[h, f_] = freqz(b,a,N,fs);
-y_ = max(abs(h))-3;
-plot(f_(1:5000),20*log(abs(h(1:5000)))); grid on; xline(fc, "b:"); yline(y_,"black:");
+[h_, f_] = freqz(b,a,N,fs);
+h = 20*log(abs(h_));
+y_ = max(abs(h))-2.88;
+plot(f_(1:12500),h(1:12500)); grid on; xline(fc, "black:"); yline(y_,"black:");
 xlabel("f [hz]"); ylabel("|H(z)| [dB]"); title("Regalia Filter, LP Shelving Filter arround 440 [hz] in Boost Mode");
-xticks(unique([gca().XTick 440]));
+xticks(unique([get(gca,"XTick") 440])); yticks(unique([gca().YTick floor(y_)]));
+text(fc + 1.1, 1.1,["fc = " + num2str(fc) + "[hz]"]); text(fc + 1.1, y_ + .1, "|H(f)| = max(|H(f)|) -3[dB]");
+ax_xlabels = get(gca,"XTickLabel"); ax_xlabels{2} = "fc = " + num2str(fc); xticklabels(ax_xlabels); xtickangle(45);
+
+igure(2);[b,a] = firstOrdRegaliaCut(fc,Gdb,fs);
+[h_, f_] = freqz(b,a,N,fs);
+h = 20*log(abs(h_));
+y_ = max(abs(h))-2.88;
+plot(f_(1:12500),h(1:12500)); grid on; xline(fc, "black:"); yline(y_,"black:");
+xlabel("f [hz]"); ylabel("|H(z)| [dB]"); title("Regalia Filter, LP Shelving Filter arround 440 [hz] in Boost Mode");
+xticks(unique([get(gca,"XTick") 440])); yticks(unique([gca().YTick floor(y_)]));
+text(fc + 1.1, 1.1,["fc = " + num2str(fc) + "[hz]"]); text(fc + 1.1, y_ + .1, "|H(f)| = max(|H(f)|) -3[dB]");
+ax_xlabels = get(gca,"XTickLabel"); ax_xlabels{2} = "fc = " + num2str(fc); xticklabels(ax_xlabels); xtickangle(45);
+
