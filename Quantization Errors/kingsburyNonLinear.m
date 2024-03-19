@@ -5,7 +5,7 @@ k2 = linspace(-2.5,2.5,M);
 [k1_,k2_] = meshgrid(k1,k2);
 
 b1 = -(2-k1_(:).*k2_(:)-k1_(:).^3);
-b2 = 1-k1_(:).*k2_(:);
+b2 = -1-k1_(:).*k2_(:);
 
 poles = [-b1./2 + 1i*sqrt(b2-(b1.^2)/4)];
 th = linspace(0,2*pi,length(2*poles-1));
