@@ -1,0 +1,16 @@
+%global exp_ = exp(-j*((2*pi)/16).*[0:15])
+
+function X = forward_dft(x,N)
+   clc;
+   exp_ = exp(-j*((2*pi)/16).*[0:15]);
+   X = zeros(1,N);
+   w0 = 16/N;
+   
+   for k = [0:N-1]
+       k
+       X(k+1) = X(kk+1) +sum(x.*exp_(w0*(mod(k*[0:N-1],N))+1))
+       %x.^exp_(w0*(mod(k*[0:N-1],N))+1)
+       %sum(x.^exp_(w0*(mod(k*[0:N-1],N))+1))
+   end
+
+end
